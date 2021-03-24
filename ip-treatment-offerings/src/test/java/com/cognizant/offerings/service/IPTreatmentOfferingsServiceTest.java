@@ -1,12 +1,13 @@
 package com.cognizant.offerings.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -93,21 +94,25 @@ public class IPTreatmentOfferingsServiceTest {
 	 */
 	@Test
 	public void test_GetIPTreatmentPackageByAilmentCategoryAndName() {
-		PackageDetail packageDetail1=new PackageDetail("Package1", "UTP 1,UTP 2", 12000, 4);
-		PackageDetail packageDetail2=new PackageDetail("Package2", "OTP 1,OTP 2", 12000, 4);
-		IPTreatmentPackage iPTreatmentPackage1 = new IPTreatmentPackage(1, "Urology", packageDetail1);
-		IPTreatmentPackage iPTreatmentPackage2 = new IPTreatmentPackage(1, "Orthopaedics", packageDetail2);
-
+		PackageDetail packageDetail1=new PackageDetail("Package 1", "UTP1, UTP2", 25000, 4);
+		PackageDetail packageDetail2=new PackageDetail("Package 2", "OTP1, OTP2", 18000, 6);
+		IPTreatmentPackage iPTreatmentPackage1 = new IPTreatmentPackage(45, "Urology", packageDetail1);
+		IPTreatmentPackage iPTreatmentPackage2 = new IPTreatmentPackage(48, "Orthopaedics", packageDetail2);
+//Orthopaedics	18000	OPT1, OPT2	6	Package 2
+		//private String treatmentPackageName;
+		//private String testDetails;
+		//private int cost;
+		//private int treatmentDurationInWeeks;
 		when(ipTreatmentOfferingsRepository.findByName("Package 1", "Urology")).thenReturn(iPTreatmentPackage1);
 		when(ipTreatmentOfferingsRepository.findByName("Package 2", "Orthopaedics")).thenReturn(iPTreatmentPackage2);
-		when(ipTreatmentOfferingsRepository.findByName("Package 2", "Urology")).thenReturn(null);
+		when(ipTreatmentOfferingsRepository.findByName("Package 22", "Urology")).thenReturn(null);
 		assertEquals(iPTreatmentPackage1,
-				ipTreatmentOfferingsServiceImpl.getIPTreatmentPackageByAilmentCategoryAndName("Package1", "Urology"));
+				ipTreatmentOfferingsServiceImpl.getIPTreatmentPackageByAilmentCategoryAndName("package1", "Urology"));
 		assertEquals(iPTreatmentPackage2,
-				ipTreatmentOfferingsServiceImpl.getIPTreatmentPackageByAilmentCategoryAndName("Package2", "Orthopaedics"));
+				ipTreatmentOfferingsServiceImpl.getIPTreatmentPackageByAilmentCategoryAndName("package2", "Orthopaedics"));
 
 		assertThrows(PackageDetailNotFoundException.class,
-				() -> ipTreatmentOfferingsServiceImpl.getIPTreatmentPackageByAilmentCategoryAndName("Package2", "Urology"));
+				() -> ipTreatmentOfferingsServiceImpl.getIPTreatmentPackageByAilmentCategoryAndName("Package 22", "Urology"));
 	}
 
 	/**

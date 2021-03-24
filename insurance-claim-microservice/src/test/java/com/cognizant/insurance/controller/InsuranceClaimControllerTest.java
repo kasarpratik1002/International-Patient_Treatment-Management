@@ -87,6 +87,7 @@ class InsuranceClaimControllerTest {
 		MvcResult result =mockMvc.perform(get("/iptms/getallinsurerdetail").header("Authorization", "Bearer Token")).andReturn();
 		String expected = "[{\"id\":1,\"insurerName\":\"insurerName\",\"insurerPackageName\":\"insurerPackageName\",\"insuranceAmountLimit\":200.0,\"disbursementDuration\":8}]";
 		String actual = result.getResponse().getContentAsString();
+		
 		assertEquals(expected, actual);
 
 	}
