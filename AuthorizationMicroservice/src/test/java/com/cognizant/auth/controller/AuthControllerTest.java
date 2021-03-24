@@ -31,7 +31,7 @@ import com.cognizant.auth.service.JwtUtil;
  * 		@RunWith is an annotation to use test runners
  *
  */
-//@RunWith(SpringRunner.class)
+
 @SpringBootTest
 public class AuthControllerTest {
 

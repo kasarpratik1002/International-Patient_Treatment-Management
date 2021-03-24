@@ -29,7 +29,7 @@ import io.jsonwebtoken.Claims;
  *
  */
 @ExtendWith(MockitoExtension.class) 
-//@RunWith(SpringRunner.class)
+
 @SpringBootTest
 public class JwtUtilTest {
 
