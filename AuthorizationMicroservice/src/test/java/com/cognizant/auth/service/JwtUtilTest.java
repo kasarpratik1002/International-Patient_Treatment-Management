@@ -1,11 +1,12 @@
 package com.cognizant.auth.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,7 +29,7 @@ import io.jsonwebtoken.Claims;
  *
  */
 @ExtendWith(MockitoExtension.class) 
-//@RunWith(SpringRunner.class)
+
 @SpringBootTest
 public class JwtUtilTest {
 
