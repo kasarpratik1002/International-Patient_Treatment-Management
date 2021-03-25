@@ -54,7 +54,7 @@
 
 
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand" href="#"><img
+		<a class="navbar-brand" href="/admindashboard"><img
 			src="https://image.shutterstock.com/image-vector/hands-cross-vector-illustration-logo-260nw-612463019.jpg"
 			height="70px" width="70px"><strong>International
 				Patient Management System</strong></a>
