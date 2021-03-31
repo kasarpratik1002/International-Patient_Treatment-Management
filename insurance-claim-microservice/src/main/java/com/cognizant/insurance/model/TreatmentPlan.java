@@ -21,9 +21,7 @@ import lombok.Setter;
  * 	    used by insurance-claim-microservice
  * 		using Feign Client
  * 
- *      @Data is a convenient shortcut annotation that bundles 
- *      the features of @ToString , @EqualsAndHashCode , @Getter / @Setter 
- *      and @RequiredArgsConstructor together
+ *      
  *
  */
 @NoArgsConstructor

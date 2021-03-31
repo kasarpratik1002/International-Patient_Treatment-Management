@@ -18,28 +18,19 @@ import com.cognizant.insurance.model.InitiateClaim;
 import com.cognizant.insurance.model.InsurerDetail;
 import com.cognizant.insurance.service.InsuranceClaimServiceImpl;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * 
  * @author Pratik K, Pratik B, Shubham, Kavya
  *
- * 		@Controller annotation is used to mark any java class as a controller class
- * 		@RequestMapping annotation is used to map the web request "/IPTMS"
- *		 @Slf4j (Simple Logging Facade for Java) provides a simple abstraction of all
+ * @Controller annotation is used to mark any java class as a controller class
+ * @RequestMapping annotation is used to map the web request "/IPTMS"
+ * @Slf4j (Simple Logging Facade for Java) provides a simple abstraction of all
  *        the logging frameworks
  */
 @RestController
-@Slf4j
+
 @RequestMapping("/iptms")
 public class InsuranceClaimController {
-
-	/**
-	 * instance variables for authorization success and unsuccess
-	 */
-	private static final String AUTHSUCCESS = "Authorization Successful";
-	private static final String AUTHUNSUCCESS = "Authorization Unsuccessful";
-	
 
 	/**
 	 * autowires the AuthClient(feign client) to communicate with authorization
@@ -47,44 +38,38 @@ public class InsuranceClaimController {
 	 */
 	@Autowired
 	AuthClient authclient;
-	
+
 	@Autowired
 	InsuranceClaimServiceImpl insuranceClaimServiceImpl;
-	
-	
+
 	/**
-	 *  Method-GET, http://localhost:9092/iptms/getallinsurerdetail
+	 * Method-GET, http://localhost:9092/iptms/getallinsurerdetail
 	 * 
-	 * to get the list of insurers available for the patients 
-	 * only after verifying that the user trying to use this service 
-	 * is authenticated or not
+	 * to get the list of insurers available for the patients only after verifying
+	 * that the user trying to use this service is authenticated or not
 	 * 
 	 * @param token
 	 * @return
 	 * @throws InvalidTokenException
 	 */
 	@GetMapping(value = "/getallinsurerdetail")
-	public List<InsurerDetail> getAllInsurerDetail(@RequestHeader(name = "Authorization") String token)throws InvalidTokenException {
-		log.info("START :: Method :: getAllInsurerDetail() :: ");
+	public List<InsurerDetail> getAllInsurerDetail(@RequestHeader(name = "Authorization") String token)
+			throws InvalidTokenException {
 		AuthResponse authResponse = authclient.verifyToken(token);
-		log.info("================================="+authResponse);
 		if (authResponse.isValid()) {
-			log.info(AUTHSUCCESS);
 			return insuranceClaimServiceImpl.getAllInsurerDetail();
-			
-		}else {
-			log.info(AUTHUNSUCCESS);
+
+		} else {
 			throw new InvalidTokenException();
-		}	
+		}
 	}
 
 	/**
 	 * Method-GET,
 	 * http://localhost:9092/IPTMS/getinsurerbypackagename/IndividualHealthInsurance
 	 * 
-	 * to get the insurer details based on the insurer package name
-	 * only after verifying that the user trying to use this service 
-	 * is authenticated or not
+	 * to get the insurer details based on the insurer package name only after
+	 * verifying that the user trying to use this service is authenticated or not
 	 * 
 	 * @param token
 	 * @param insurerPackageName
@@ -92,49 +77,39 @@ public class InsuranceClaimController {
 	 * @throws InvalidTokenException
 	 */
 	@GetMapping(value = "/getinsurerbypackagename/{insurerPackageName}")
-	public InsurerDetail getInsurerDetail(@RequestHeader(name = "Authorization") String token, @PathVariable String insurerPackageName)throws InvalidTokenException {
-		log.info("START :: Method :: getInsurerDetail() :: ");
+	public InsurerDetail getInsurerDetail(@RequestHeader(name = "Authorization") String token,
+			@PathVariable String insurerPackageName) throws InvalidTokenException {
 		AuthResponse authResponse = authclient.verifyToken(token);
-		log.info("================================="+authResponse);
 		if (authResponse.isValid()) {
-			log.info(AUTHSUCCESS);
 			InsurerDetail insurerDetail = insuranceClaimServiceImpl.getInsurerDetail(insurerPackageName);
-			log.info("InsurerDetail-> {}",insurerDetail);
 			return insurerDetail;
-		}else {
-			log.info(AUTHUNSUCCESS);
+		} else {
 			throw new InvalidTokenException();
-		}	
-		
+		}
+
 	}
 
 	/**
 	 * Method-POST, http://localhost:9092/iptms/initiateclaim
 	 * 
-	 * initiates claim for insurance of a patient whose 
-	 * current status is "In Progress" 
-	 * by providing claim details
-	 * only after verifying that the user trying to use this service 
-	 * is authenticated or not
+	 * initiates claim for insurance of a patient whose current status is "In
+	 * Progress" by providing claim details only after verifying that the user
+	 * trying to use this service is authenticated or not
 	 * 
 	 * @param token
 	 * @param initiateClaim
 	 * @return
 	 */
 	@PostMapping(value = "/initiateclaim")
-	public double initiateClaim(@RequestHeader(name = "Authorization") String token, @RequestBody InitiateClaim initiateClaim) {
-		log.info("START :: Method :: initiateClaim() :: ");
+	public double initiateClaim(@RequestHeader(name = "Authorization") String token,
+			@RequestBody InitiateClaim initiateClaim) {
 		AuthResponse authResponse = authclient.verifyToken(token);
-		log.info("===================servic=========="+authResponse);
 		if (authResponse.isValid()) {
-			log.info(AUTHSUCCESS);
-			double cost=insuranceClaimServiceImpl.initiateClaim(token,initiateClaim);
-			log.info("===================servic=========="+cost);
+			double cost = insuranceClaimServiceImpl.initiateClaim(token, initiateClaim);
 			return cost;
-		}else {
-			log.info(AUTHUNSUCCESS);
+		} else {
 			throw new InvalidTokenException();
-		}		
+		}
 	}
 
 }
