@@ -15,9 +15,7 @@ import lombok.Setter;
  * 
  * 		model class for Specialist Details
  * 
- *      @Data is a convenient shortcut annotation that bundles 
- *      the features of @ToString , @EqualsAndHashCode , @Getter / @Setter 
- *      and @RequiredArgsConstructor together
+ *      
  *
  */
 @Setter

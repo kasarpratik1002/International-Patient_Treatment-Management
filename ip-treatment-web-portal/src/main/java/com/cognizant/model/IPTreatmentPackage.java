@@ -12,9 +12,7 @@ import lombok.Setter;
  * 
  * 		model class for IP Treatment Packages
  * 
- *      @Data is a convenient shortcut annotation that bundles 
- *      the features of @ToString , @EqualsAndHashCode , @Getter / @Setter 
- *      and @RequiredArgsConstructor together
+ *      
  *
  */
 @AllArgsConstructor

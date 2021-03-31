@@ -10,9 +10,7 @@ package com.cognizant.model;
  * 
  * 		model class for Initiating Claim for a patient
  * 
- *      @Data is a convenient shortcut annotation that bundles 
- *      the features of @ToString , @EqualsAndHashCode , @Getter / @Setter 
- *      and @RequiredArgsConstructor together
+ *     
  *
  */
 import lombok.AllArgsConstructor;
