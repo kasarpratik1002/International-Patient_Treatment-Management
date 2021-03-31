@@ -27,18 +27,16 @@ import com.cognizant.model.TreatmentPlan;
 import com.cognizant.service.AuthFeignService;
 import com.cognizant.service.PortalService;
 
-import lombok.extern.slf4j.Slf4j;
 /**
  * 
  * @author Pratik, Shubham, Pratik, Kavya
  *
- * 		@Controller annotation is used to mark any java class as a controller class
- * 		
- *		 @Slf4j (Simple Logging Facade for Java) provides a simple abstraction of all
- *        the logging frameworks
+ * @Controller annotation is used to mark any java class as a controller class
+ * 
+ 
  */
 @RestController
-@Slf4j
+
 public class IPTreatmentController {
 
 	/**
@@ -48,19 +46,22 @@ public class IPTreatmentController {
 	@Autowired
 	private AuthenticationFeign authClient;
 	/**
-	 * autowires the IPTFClient(IP-treatments-Microservice feign client) to communicate with authorization
+	 * autowires the IPTFClient(IP-treatments-Microservice feign client) to
+	 * communicate with authorization
 	 *
 	 */
 	@Autowired
 	IPTFClient iPTFClient;
 	/**
-	 * autowires the IPTFOClient(IP-treatment-Offernings feign client) to communicate with authorization
+	 * autowires the IPTFOClient(IP-treatment-Offernings feign client) to
+	 * communicate with authorization
 	 *
 	 */
 	@Autowired
 	IPTOFClient iPTFOClient;
 	/**
-	 * autowires the ICClient(Insurance-Claim-Microservice feign client) to communicate with authorization
+	 * autowires the ICClient(Insurance-Claim-Microservice feign client) to
+	 * communicate with authorization
 	 *
 	 */
 	@Autowired
@@ -77,30 +78,28 @@ public class IPTreatmentController {
 	 */
 	@Autowired
 	private PortalService portalService;
-	
+
 	/**
-	 * Method-GET, http://localhost:8098/
-	 * This method will return the login page
+	 * Method-GET, http://localhost:8098/ This method will return the login page
 	 * 
 	 * @return login jsp page
 	 */
 	@GetMapping(value = "/")
 	public ModelAndView getLoginPage() {
-		log.info("START :: Method :: getLoginPage() :: ");
 		return new ModelAndView("login");
 	}
+
 	/**
-	 * Method-POST, http://localhost:8098/login
-	 * This method will perform the Login Opertaion by Validating the User Credentials
+	 * Method-POST, http://localhost:8098/login This method will perform the Login
+	 * Opertaion by Validating the User Credentials
 	 * 
-	 * @param Admin Object
+	 * @param Admin              Object
 	 * @param HttpServletRequest object
 	 *
 	 * @return AdminDashboard JSP Page after Successful Authentication
 	 */
 	@PostMapping(value = "/login")
 	public ModelAndView getLogin(@ModelAttribute("user") Admin user, HttpServletRequest request) {
-		log.info("START :: Method :: getLogin() :: ");
 		Admin admin = null;
 		try {
 			@SuppressWarnings("unchecked")
@@ -110,38 +109,37 @@ public class IPTreatmentController {
 
 		} catch (Exception e) {
 			ModelAndView mAV = new ModelAndView("login");
-			String invalidLogin="Username or password is Incorrect";
+			String invalidLogin = "Username or password is Incorrect";
 			mAV.addObject("error", invalidLogin);
-			
+
 			return mAV;
 		}
 		request.getSession().setAttribute("token", "Bearer " + admin.getAuthToken());
 		request.getSession().setAttribute("name", admin.getUserid());
 		return new ModelAndView("AdminDashboard");
 	}
-	
+
 	/**
-	 * Method-GET, http://localhost:8098/admindashboard
-	 * This method will return the Admin Dashboard
+	 * Method-GET, http://localhost:8098/admindashboard This method will return the
+	 * Admin Dashboard
 	 * 
 	 * @return AdminDashboard jsp page
 	 */
 	@GetMapping(value = "/admindashboard")
 	public ModelAndView getDashboard(HttpServletRequest request) {
-		log.info("START :: Method :: getDashboard() :: ");
 		String token = (String) request.getSession().getAttribute("token");
-		if(token!=null) {
-			
-		return new ModelAndView("AdminDashboard");
-		}
-		else {
+		if (token != null) {
+
+			return new ModelAndView("AdminDashboard");
+		} else {
 			return new ModelAndView("redirect:/");
 		}
-		}
-	
+	}
+
 	/**
-	 * Method-POST, http://localhost:8098/register
-	 * This method will register a Patient based on the Ailment and treatment Package Chosen
+	 * Method-POST, http://localhost:8098/register This method will register a
+	 * Patient based on the Ailment and treatment Package Chosen
+	 * 
 	 * @param pid
 	 * @param cost
 	 * @param packageName
@@ -152,16 +150,18 @@ public class IPTreatmentController {
 	@PostMapping(value = "/register")
 	public ModelAndView getRegister(@RequestParam("pId") String id, @RequestParam("cost") int cost,
 			@RequestParam("pName") String pack, @RequestParam("aName") String ailment) {
-		log.info("START :: Method :: getRegister() :: ");
 		ModelAndView mAV = new ModelAndView("registration");
 		mAV.addObject("pack", pack);
 		mAV.addObject("ailment", ailment);
 		mAV.addObject("cost", cost);
 		return mAV;
 	}
+
 	/**
-	 * Method-POST, http://localhost:8098/registerSubmit
-	 * This method will register a Patient based on the Ailment and treatment Package Chosen and Create a Treatment Plan
+	 * Method-POST, http://localhost:8098/registerSubmit This method will register a
+	 * Patient based on the Ailment and treatment Package Chosen and Create a
+	 * Treatment Plan
+	 * 
 	 * @param name
 	 * @param age
 	 * @param aliment
@@ -174,7 +174,6 @@ public class IPTreatmentController {
 	public ModelAndView registerPatient(@RequestParam("name") String name, @RequestParam("age") int age,
 			@RequestParam("ailment") String ailment, @RequestParam("treatmentPackageName") String pkg,
 			@RequestParam("cost") int cost, HttpServletRequest request) {
-		log.info("START :: Method :: registerPatient() :: ");
 		PatientDetail patient = new PatientDetail(0, name, age, ailment, pkg, null);
 		if (patient.getTreatmentPackageName().equalsIgnoreCase("Package 1"))
 			patient.setTreatmentPackageName("package1");
@@ -182,12 +181,11 @@ public class IPTreatmentController {
 			patient.setTreatmentPackageName("package2");
 		String token = (String) request.getSession().getAttribute("token");
 		TreatmentPlan tp = portalService.registerPatient(token, patient, cost);
-		System.out.println(tp);
 		ModelAndView mAV = new ModelAndView("particulartreatplan");
 		mAV.addObject("plan", tp);
 		return mAV;
 	}
-	
+
 	/**
 	 * Method-GET, http://localhost:8098/patients
 	 * 
@@ -200,7 +198,6 @@ public class IPTreatmentController {
 
 	@GetMapping(value = "/patients")
 	public ModelAndView getPatients(HttpServletRequest request) {
-		log.info("START :: Method :: getPatients() :: ");
 		String token = (String) request.getSession().getAttribute("token");
 		@SuppressWarnings("unused")
 		String name = (String) request.getSession().getAttribute("name");
@@ -214,10 +211,12 @@ public class IPTreatmentController {
 		}
 
 	}
+
 	/**
 	 * Method-GET, http://localhost:8098/ongoingTreatments
 	 * 
-	 * this method will return the List of the Patient whose Treatment is going On And Status can be changed.
+	 * this method will return the List of the Patient whose Treatment is going On
+	 * And Status can be changed.
 	 * 
 	 * @param HttpServletRequest object
 	 * @return treatplan JSP page
@@ -225,7 +224,6 @@ public class IPTreatmentController {
 	 */
 	@GetMapping(value = "/ongoingTreatments")
 	public ModelAndView getTreatmentPlans(HttpServletRequest request) {
-		log.info("START :: Method :: getTreatmentPlans() :: ");
 		String token = (String) request.getSession().getAttribute("token");
 		@SuppressWarnings("unused")
 		String name = (String) request.getSession().getAttribute("name");
@@ -239,6 +237,7 @@ public class IPTreatmentController {
 		}
 
 	}
+
 	/**
 	 * Method-GET, http://localhost:8098/ongoingTreatmentsnew
 	 * 
@@ -250,7 +249,6 @@ public class IPTreatmentController {
 	 */
 	@GetMapping(value = "/ongoingTreatmentsnew")
 	public ModelAndView getTreatmentPlansNew(HttpServletRequest request) {
-		log.info("START :: Method :: getTreatmentPlans() :: ");
 		String token = (String) request.getSession().getAttribute("token");
 		@SuppressWarnings("unused")
 		String name = (String) request.getSession().getAttribute("name");
@@ -265,7 +263,6 @@ public class IPTreatmentController {
 
 	}
 
-
 	/**
 	 * Method-GET, http://localhost:8098/specialist
 	 * 
@@ -277,7 +274,6 @@ public class IPTreatmentController {
 	 */
 	@GetMapping(value = "/specialist")
 	public ModelAndView getSpecialist(HttpServletRequest request) {
-		log.info("START :: Method :: getSpecialist() :: ");
 		String token = (String) request.getSession().getAttribute("token");
 		@SuppressWarnings("unused")
 		String name = (String) request.getSession().getAttribute("name");
@@ -290,10 +286,12 @@ public class IPTreatmentController {
 			return new ModelAndView("redirect:/");
 		}
 	}
+
 	/**
 	 * Method-GET, http://localhost:8098/packages
 	 * 
-	 * this method will return the List of Treatment Packages Available at the Hospital.
+	 * this method will return the List of Treatment Packages Available at the
+	 * Hospital.
 	 * 
 	 * @param HttpServletRequest object
 	 * @return packages jsp page
@@ -301,7 +299,6 @@ public class IPTreatmentController {
 	 */
 	@GetMapping(value = "/packages")
 	public ModelAndView getPackages(HttpServletRequest request) {
-		log.info("START :: Method :: getPackages() :: ");
 		String token = (String) request.getSession().getAttribute("token");
 		@SuppressWarnings("unused")
 		String name = (String) request.getSession().getAttribute("name");
@@ -315,11 +312,12 @@ public class IPTreatmentController {
 			return new ModelAndView("redirect:/");
 		}
 	}
-	
+
 	/**
 	 * Method-GET, http://localhost:8098/insurer
 	 * 
-	 * this method will return the List of Insurance Providers Available in the Hospital.
+	 * this method will return the List of Insurance Providers Available in the
+	 * Hospital.
 	 * 
 	 * @param HttpServletRequest object
 	 * @return insurer jsp page
@@ -328,7 +326,6 @@ public class IPTreatmentController {
 
 	@GetMapping(value = "/insurer")
 	public ModelAndView getInsurer(HttpServletRequest request) {
-		log.info("START :: Method :: getInsurer() :: ");
 		String token = (String) request.getSession().getAttribute("token");
 		@SuppressWarnings("unused")
 		String name = (String) request.getSession().getAttribute("name");
@@ -341,18 +338,20 @@ public class IPTreatmentController {
 			return new ModelAndView("redirect:/");
 		}
 	}
+
 	/**
 	 * Method-GET, http://localhost:8098/claimInsurance
 	 * 
-	 * this method will return the List of Insurer Available in the Hospital for a Particular Patient.
-	 *  @param pid
+	 * this method will return the List of Insurer Available in the Hospital for a
+	 * Particular Patient.
+	 * 
+	 * @param pid
 	 * @param HttpServletRequest object
 	 * @return Claim jsp page
 	 * 
 	 */
 	@GetMapping(value = "/claimInsurance")
 	public ModelAndView claimInsurance(@RequestParam("id") int ptId, HttpServletRequest request) {
-		log.info("START :: Method :: claimInsurance() :: ");
 		String token = (String) request.getSession().getAttribute("token");
 		@SuppressWarnings("unused")
 		String name = (String) request.getSession().getAttribute("name");
@@ -368,21 +367,23 @@ public class IPTreatmentController {
 		}
 
 	}
+
 	/**
 	 * Method-POST, http://localhost:8098/initiateClaim
 	 * 
-	 * this method will return the FInal Amount payable by a patient after the insurance claim is Settled.
-	 *  @param pid
-	 *  @param packageName
+	 * this method will return the FInal Amount payable by a patient after the
+	 * insurance claim is Settled.
+	 * 
+	 * @param pid
+	 * @param packageName
 	 * @param HttpServletRequest object
 	 * @return final jsp page
 	 * 
 	 */
-	
+
 	@PostMapping(value = "/initiateClaim")
 	public ModelAndView initiateClaim(@RequestParam("ptId") long ptId, @RequestParam String pckgName,
 			HttpServletRequest request) {
-		log.info("START :: Method :: initiateClaim() :: ");
 		String token = (String) request.getSession().getAttribute("token");
 		@SuppressWarnings("unused")
 		String name = (String) request.getSession().getAttribute("name");
@@ -414,6 +415,7 @@ public class IPTreatmentController {
 		}
 
 	}
+
 	/**
 	 * Method-get, http://localhost:8098/logout
 	 * 
@@ -425,7 +427,6 @@ public class IPTreatmentController {
 	 */
 	@GetMapping(value = "/logout")
 	public ModelAndView logout(HttpServletRequest request) {
-		log.info("START :: Method :: logout() :: ");
 		request.getSession().invalidate();
 		return new ModelAndView("redirect:/");
 	}

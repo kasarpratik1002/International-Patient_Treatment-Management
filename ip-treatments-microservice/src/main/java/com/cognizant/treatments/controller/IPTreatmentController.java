@@ -79,7 +79,6 @@ public class IPTreatmentController {
 	
 	@PostMapping(value = "/formulatetreatmenttimetable/{cost}")
 	public TreatmentPlan formulateTreatmentTimetable(@RequestHeader(name = "Authorization") String token, @RequestBody PatientDetail patientDetail, @PathVariable int cost)throws InvalidTokenException {
-		log.info("START :: Method :: formulateTreatmentTimetable() :: ");
 		AuthResponse authResponse = authclient.verifyToken(token);
 		if (authResponse.isValid()) {
 			log.info(AUTHSUCCESS);
@@ -105,7 +104,6 @@ public class IPTreatmentController {
 	
 	@GetMapping("/getallpatients")
 	public List<PatientDetail> getAllPatients(@RequestHeader(name = "Authorization") String token)throws InvalidTokenException {
-		log.info("START :: Method :: getAllPatients() :: ");
 		AuthResponse authResponse = authclient.verifyToken(token);
 		if (authResponse.isValid()) {
 			log.info(AUTHSUCCESS);
@@ -132,7 +130,6 @@ public class IPTreatmentController {
 
 	@GetMapping("/getallplans")
 	public List<TreatmentPlan> getAllPlans(@RequestHeader(name = "Authorization") String token)throws InvalidTokenException {
-		log.info("START :: Method :: getAllPlans() :: ");
 		AuthResponse authResponse = authclient.verifyToken(token);
 		if (authResponse.isValid()) {
 			log.info(AUTHSUCCESS);
@@ -158,11 +155,9 @@ public class IPTreatmentController {
 	
 	@GetMapping("/getallongoingtreatments")
 	public List<TreatmentPlan> getAllOnGoingTreatments(@RequestHeader(name = "Authorization") String token)throws InvalidTokenException {
-		log.info("START :: Method :: getAllOnGoingTreatments :: ");
 		AuthResponse authResponse = authclient.verifyToken(token);
 		if (authResponse.isValid()) {
 			log.info(AUTHSUCCESS);
-			log.info("All Ongoing Treatment are being displayed successfully!");
 			return iptService.getAllOnGoingplans();
 		}else {
 			log.info(AUTHUNSUCCESS);
@@ -185,12 +180,9 @@ public class IPTreatmentController {
 
 	@GetMapping("/getpatient/{patientId}")
 	public PatientDetail getPatient(@RequestHeader(name = "Authorization") String token, @PathVariable long patientId)throws InvalidTokenException {
-		log.info("START :: Method :: getPatient() :: ");
 		AuthResponse authResponse = authclient.verifyToken(token);
 		if (authResponse.isValid()) {
 			log.info(AUTHSUCCESS);
-			log.info("Patient by id: "+patientId+" is being displayed successfully!");
-			System.out.println("======"+iptService.getPatient(patientId));
 			return iptService.getPatient(patientId);
 		}else {
 			log.info(AUTHUNSUCCESS);
@@ -211,11 +203,9 @@ public class IPTreatmentController {
 	 */
 	@GetMapping("/getplan/{patientId}")
 	public TreatmentPlan getAPlan(@RequestHeader(name = "Authorization") String token, @PathVariable int patientId)throws InvalidTokenException {
-		log.info("START :: Method :: getAPlan() :: ");
 		AuthResponse authResponse = authclient.verifyToken(token);
 		if (authResponse.isValid()) {
 			log.info(AUTHSUCCESS);
-			log.info("Plan is displayed!");
 			return iptService.getPlan(patientId);
 		}else {
 			log.info(AUTHUNSUCCESS);
@@ -234,11 +224,9 @@ public class IPTreatmentController {
 	 */
 	@PutMapping("/updateplan/{patientId}")
 	public void updatePlan(@RequestHeader(name = "Authorization") String token, @PathVariable long patientId)throws InvalidTokenException {
-		log.info("START :: Method :: updatePlan() :: ");
 		AuthResponse authResponse = authclient.verifyToken(token);
 		if (authResponse.isValid()) {
 			log.info(AUTHSUCCESS);
-			log.info("Plan is updated!");
 			iptService.updatePlan(patientId);
 		}else {
 			log.info(AUTHUNSUCCESS);

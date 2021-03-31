@@ -14,15 +14,10 @@ import org.springframework.context.annotation.Configuration;
  *                        host of features, e.g. Java-based Spring
  *                        configuration, component scanning, and in particular
  *                        for enabling Spring Boot's auto-configuration feature.
- * @EnableFeignClients scans for interfaces that declare they are feign clients
- *                     (via @FeignClient )
- * @EnableAutoConfiguration Enable auto-configuration of the Spring Application
- *                                Context, attempting to guess andconfigure
- *                                beans that you are likely to need.
+ *
  */
 
-@EnableAutoConfiguration
-@Configuration
+
 @EnableFeignClients
 @SpringBootApplication
 public class IpTreatmentWebPortalApplication {

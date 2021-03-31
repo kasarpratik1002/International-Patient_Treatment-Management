@@ -11,9 +11,7 @@ import lombok.Setter;
  * 
  * 		model class for authorization response
  * 
- *      @Data is a convenient shortcut annotation that bundles 
- *      the features of @ToString , @EqualsAndHashCode , @Getter / @Setter 
- *      and @RequiredArgsConstructor together
+ *     
  *
  */
 @Getter

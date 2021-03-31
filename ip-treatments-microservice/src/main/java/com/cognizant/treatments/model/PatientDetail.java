@@ -18,9 +18,7 @@ import lombok.Setter;
  * 
  * 		@Entity indicates Spring Data JPA that it is an entity class for the
  *      application
- *      @Data is a convenient shortcut annotation that bundles 
- *      the features of @ToString , @EqualsAndHashCode , @Getter / @Setter 
- *      and @RequiredArgsConstructor together
+ *     
  *
  */
 

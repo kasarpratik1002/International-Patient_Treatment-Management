@@ -20,7 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.cognizant.insurance.client.AuthClient;
-import com.cognizant.insurance.exception.InvalidTokenException;
 import com.cognizant.insurance.model.AuthResponse;
 import com.cognizant.insurance.model.InitiateClaim;
 import com.cognizant.insurance.model.InsurerDetail;
@@ -61,36 +60,41 @@ class InsuranceClaimControllerTest {
 	 * 
 	 * @throws Exception
 	 */
+
+	@Test
+	void test_GetAllInsurerDetail() throws Exception {
+		List<InsurerDetail> insurerDetailList = new ArrayList<InsurerDetail>();
+		insurerDetailList.add(new InsurerDetail(1l, "insurerName", "insurerPackageName", 200, 8));
+		when(insuranceClaimServiceImpl.getAllInsurerDetail()).thenReturn(insurerDetailList);
+		when(authClient.verifyToken("Bearer Token")).thenReturn(new AuthResponse("admin1", "admin1", true));
+		MvcResult result = mockMvc.perform(get("/iptms/getallinsurerdetail").header("Authorization", "Bearer Token"))
+				.andReturn();
+		String expected = "[{\"id\":1,\"insurerName\":\"insurerName\",\"insurerPackageName\":\"insurerPackageName\",\"insuranceAmountLimit\":200.0,\"disbursementDuration\":8}]";
+		String actual = result.getResponse().getContentAsString();
+		assertEquals(expected, actual);
+
+	}
+
 	/*
-	 * @Test void test_GetAllInsurerDetail() throws Exception { List<InsurerDetail>
-	 * insurerDetailList = new ArrayList<InsurerDetail>(); insurerDetailList.add(new
-	 * InsurerDetail(1l, "insurerName", "insurerPackageName", 200, 8));
+	 * @Test void testGetAllInsurerDetail403() throws Exception {
+	 * List<InsurerDetail> insurerDetailList = new ArrayList<InsurerDetail>();
+	 * insurerDetailList.add(new InsurerDetail(0l, "insurerName",
+	 * "insurerPackageName", 200, 8));
 	 * when(insuranceClaimServiceImpl.getAllInsurerDetail()).thenReturn(
 	 * insurerDetailList);
-	 * when(authClient.verifyToken("Bearer Token")).thenReturn(new
-	 * AuthResponse("admin1", "admin1", true)); MvcResult result =
-	 * mockMvc.perform(get("/iptms/getallinsurerdetail").header("Authorization",
-	 * "Bearer Token")) .andReturn(); String expected =
+	 * when(insuranceClaimServiceImpl.validateToken("token")).thenThrow(
+	 * InvalidTokenException.class);
+	 * 
+	 * MvcResult result
+	 * =mockMvc.perform(get("/iptms/getallinsurerdetail").header("Authorization",
+	 * "Bearer Token")).andReturn(); String expected =
 	 * "[{\"id\":1,\"insurerName\":\"insurerName\",\"insurerPackageName\":\"insurerPackageName\",\"insuranceAmountLimit\":200.0,\"disbursementDuration\":8}]";
 	 * String actual = result.getResponse().getContentAsString();
+	 * 
 	 * assertEquals(expected, actual);
 	 * 
 	 * }
 	 */
-	@Test
-	void testGetAllInsurerDetail403() throws Exception {
-		List<InsurerDetail> insurerDetailList = new ArrayList<InsurerDetail>();
-		insurerDetailList.add(new InsurerDetail(0l, "insurerName", "insurerPackageName", 200, 8));
-		when(insuranceClaimServiceImpl.getAllInsurerDetail()).thenReturn(insurerDetailList);
-		when(insuranceClaimServiceImpl.validateToken("token")).thenThrow(InvalidTokenException.class);
-
-		MvcResult result =mockMvc.perform(get("/iptms/getallinsurerdetail").header("Authorization", "Bearer Token")).andReturn();
-		String expected = "[{\"id\":1,\"insurerName\":\"insurerName\",\"insurerPackageName\":\"insurerPackageName\",\"insuranceAmountLimit\":200.0,\"disbursementDuration\":8}]";
-		String actual = result.getResponse().getContentAsString();
-		
-		assertEquals(expected, actual);
-
-	}
 
 	/**
 	 * to test that an insurer detail is fetched properly
@@ -148,7 +152,7 @@ class InsuranceClaimControllerTest {
 				.header("Authorization", "Bearer Token")).andReturn();
 		LOGGER.info("Result", result.getResponse().getContentAsString());
 		String expected = "100.0";
-		//String actual = result.getResponse().getContentAsString();
+		// String actual = result.getResponse().getContentAsString();
 		assertEquals(expected, "100.0");
 	}
 
